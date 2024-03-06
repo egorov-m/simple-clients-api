@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from .base import CustomListSerializer
 from .. import models
 from .address import AddressSerializer
 from .child import ChildSerializer
@@ -12,7 +11,7 @@ from .passport import PassportSerializer
 class ClientSerializer(serializers.ModelSerializer):
     children = ChildSerializer(many=True, allow_null=True, default=[])
 
-    document_ids = serializers.PrimaryKeyRelatedField(queryset=models.Document.objects.all(), allow_null=True, default=[])
+    document_ids = serializers.PrimaryKeyRelatedField(queryset=models.Document.objects.all(), many=True, allow_null=True, default=[])
 
     passport = PassportSerializer(allow_null=False, default=None)
     living_address = AddressSerializer(allow_null=False, default=None)
@@ -22,7 +21,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ClientWithSpouse
-        list_serializer_class = CustomListSerializer
         fields = (
             "id",
             "name",

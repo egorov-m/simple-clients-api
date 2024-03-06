@@ -1,17 +1,15 @@
-from uuid import UUID
-
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status
+from rest_framework import status, mixins
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from simple_clients_api.core import models
-from simple_clients_api.core.serializers import ClientSerializer, ClientWithSpouseSerializer
+from simple_clients_api.core.serializers import ClientWithSpouseSerializer
 from simple_clients_api.utils.serializers import get_class_serializer_by_field_name
 
 from simple_clients_api.utils.models import get_class_model_by_field_name
@@ -24,28 +22,20 @@ _search_fields = (
 )
 
 
-class ClientViewSet(ModelViewSet):
+class ClientViewSet(mixins.CreateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
+                    GenericViewSet):
     queryset = models.ClientWithSpouse.objects.all()
-    serializer_class = ClientSerializer
+    serializer_class = ClientWithSpouseSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     search_fields = _search_fields
     pagination_class = PageNumberPagination
-    ordering_fields = ("createdAt",)
+    ordering_fields = ("createdAt", "updatedAt")
 
-
-class ClientsByIdView(APIView):
-    serializer_class = ClientWithSpouseSerializer
-
-    def get(self, request, client_id: UUID):
-        try:
-            client = models.ClientWithSpouse.objects.get(id=client_id)
-            serializer = self.serializer_class(client)
-            return Response(serializer.data)
-        except models.ClientWithSpouse.DoesNotExist:
-            raise NotFound
-
-    def patch(self, request, client_id: UUID):
-        client = models.ClientWithSpouse.objects.filter(id=client_id).first()
+    @action(methods=["patch"], detail=False, url_path="<uuid:id>")
+    def patch(self, request, pk=None):
+        client = models.ClientWithSpouse.objects.filter(id=pk).first()
         if not client:
             raise NotFound
 
@@ -78,8 +68,9 @@ class ClientsByIdView(APIView):
                 client.save()
             return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-    def delete(self, request, client_id: UUID):
-        client = models.ClientWithSpouse.objects.filter(id=client_id).first()
+    @action(methods=["delete"], detail=False, url_path="<uuid:id>")
+    def delete(self, request, pk=None):
+        client = models.ClientWithSpouse.objects.filter(id=pk).first()
         if not client:
             raise NotFound
 

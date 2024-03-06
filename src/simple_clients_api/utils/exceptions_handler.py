@@ -44,10 +44,10 @@ def _handle_validation_error(exc: ValidationError, context, response: Response):
         "status": 422,
         "code": "VALIDATION_EXCEPTION",
         "exceptions": [{
-            "field": "",
-            "rule": item.code,
-            "message": item
-        } for item in exc.detail]
+            "field": key,
+            "rule": getattr(value, "code", ""),
+            "message": str(value)
+        } for key, value in exc.detail.items()]
     }
 
     return response

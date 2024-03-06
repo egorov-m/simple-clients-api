@@ -126,10 +126,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],
-    "DEFAULT_RENDERER_CLASSES": (
-        "rest_framework_json_api.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer"
-    ),
+    # "DEFAULT_RENDERER_CLASSES": (
+    #     "rest_framework_json_api.renderers.JSONRenderer",
+    #     "rest_framework.renderers.BrowsableAPIRenderer"
+    # ),
     "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
     "DEFAULT_FILTER_BACKENDS": (
         "rest_framework_json_api.filters.QueryParameterValidationFilter",
