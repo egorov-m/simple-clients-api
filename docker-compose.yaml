@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  simple_clients_api:
+    container_name: "clients_api"
+    restart: on-failure
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    networks:
+      - clients_network
+
+networks:
+  clients_network:
+    driver: bridge

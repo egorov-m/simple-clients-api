@@ -117,10 +117,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    "EXCEPTION_HANDLER": "rest_framework_json_api.exceptions.exception_handler",
+    "EXCEPTION_HANDLER": "simple_clients_api.utils.exceptions_handler.custom_exception_handler",
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework_json_api.parsers.JSONParser",
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
     ],

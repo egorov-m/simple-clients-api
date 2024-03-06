@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from .base import CustomListSerializer
 from .. import models
 from .address import AddressSerializer
 from .child import ChildSerializer
@@ -21,6 +22,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ClientWithSpouse
+        list_serializer_class = CustomListSerializer
         fields = (
             "id",
             "name",

@@ -1,6 +1,6 @@
 from .address import Address
 from .child import Child
-from .client import ClientWithSpouse
+from .client import ClientWithSpouse, ChildClient, DocumentClient, JobClient, CommunicationClient
 from .communication import Communication
 from .document import Document
 from .job import Job
@@ -10,6 +10,10 @@ __all__ = (
     Address,
     Child,
     ClientWithSpouse,
+    ChildClient,
+    DocumentClient,
+    JobClient,
+    CommunicationClient,
     Communication,
     Document,
     Job,

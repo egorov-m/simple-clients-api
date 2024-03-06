@@ -2,14 +2,14 @@ from django.db import models
 
 from .document import Document
 from .address import Address
-from .base import BaseModel, TimeStampedModel
+from .base import BaseModel, TimeStampedModel, SoftDelete
 from .child import Child
 from .communication import Communication
 from .job import Job
 from .passport import Passport
 
 
-class ClientWithSpouse(BaseModel, TimeStampedModel):
+class ClientWithSpouse(BaseModel, SoftDelete, TimeStampedModel):
     name = models.CharField(max_length=255, null=True, blank=True)
     surname = models.CharField(max_length=255, null=True, blank=True)
     patronymic = models.CharField(max_length=255, null=True, blank=True)
